@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="inputValue" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div  class="input-group-append">
+                    <button id="search-btn" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+          <img src="https://openweathermap.org/img/wn/02d@2x.png" alt=""> 
+          <div  id="weather-show">
+
+          </div>
+        </div>
+    </div>
+    <script>
+        const searchBtn = document.getElementById('search-btn');
+        const inputValue = document.getElementById('inputValue');
+        const weatherShow = document.getElementById('weather-show');
+        searchBtn.addEventListener('click', function(){
+
+            if(inputValue.value == '' || inputValue.value == ' '){
+                alert('Please Type City Name')
+            }
+            else{
+             fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputValue.value}&appid=d1618fc431dcd0bd3fdefcc1f26b0c36`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+               const cityNameInput = data.name;  
+                const cityTemperature = data.wind.deg;
+                
+                const weatherInfo = data['weather'][0]['main'];
+          
+                weatherShow.innerHTML = `
+                    <h1 id="city-name">${cityNameInput}</h1> 
+                    <h3><span id="temperature">${cityTemperature}</span>&deg;C</h3>
+                    <h1 class="lead">${weatherInfo}</h1>`   
+            })
+            .catch(err => alert('Wrong city name!'))
+            inputValue.value = ''
+            }
+
+        })
+
+    </script>
+</body>
+
+</html>
